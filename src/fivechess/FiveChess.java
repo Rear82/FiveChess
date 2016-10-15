@@ -4,6 +4,12 @@
  * and open the template in the editor.
  */
 package fivechess;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.util.*;
 /**
  *
@@ -34,6 +40,66 @@ public class FiveChess {
 	 * @param args the command line arguments
 	 */
 	
+	public static void cundang()throws Exception{
+		File file = new File("存档.txt");
+		if(!file.exists()){
+			file.createNewFile();
+		}
+		BufferedWriter br=new BufferedWriter(new FileWriter(file));
+		
+		br.write(Integer.toString(who));
+		br.newLine();
+		br.write(Integer.toString(last[0]));
+		br.newLine();
+		br.write(Integer.toString(last[1]));
+		
+		
+		for(int i=0;i<10;i++)
+		{
+			for(int j=0;j<10;j++)
+			{
+				br.newLine();
+				br.write(Integer.toString(tu[i][j]));
+			}
+		}
+		br.close();
+	}
+	
+	
+	
+	public static void duqu()throws Exception
+	{
+		File file =new File("存档.txt");
+		if(!file.exists())
+		{
+			System.out.println("没有发现存档文件！");
+			result=0;
+			qingkong();
+		}
+		else{
+			InputStreamReader isr=new InputStreamReader(new FileInputStream(file),"utf-8");
+			BufferedReader br=new BufferedReader(isr);
+			String s = null;
+			int[] shuju=new int[103];
+			int i=0;
+			while((s=br.readLine())!=null){
+			shuju[i]=Integer.parseInt(s);
+			i++;
+			}
+			who=shuju[0];
+			last[0]=shuju[1];
+			last[1]=shuju[2];
+			for(i=0;i<10;i++)
+		{
+			for(int j=0;j<10;j++)
+			{
+				tu[i][j]=shuju[i*10+j+3];
+			}
+		}
+		}
+	}	
+		
+		
 	public static  String zhuanhuan(int i,int j)
 	{
 		if(i==last[0]&&j==last[1]){
@@ -259,7 +325,7 @@ public class FiveChess {
 		return 0;
 	}
 
-	public static void game(){
+	public static void game() throws Exception{
 		String s=null;
 		int m=0,n=0;
 		int t;
@@ -307,16 +373,26 @@ public class FiveChess {
 		who=2/who;
 		bushu++;
 		jilu();
-		
+		cundang();
 		}
 		}
 		xmlprint(tu);
 		
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		// TODO code application logic here
+		System.out.println("欢迎来到2048小游戏！\n开发者:Rear82\n操作说明:使用w键向上，s键向下，d键向右，a键向左。\n您也可以输入b键来撤销上一步操作。\n输入1来载入上一次游戏，输入2来开始新游戏！");
+		Scanner input = new Scanner(System.in);
+		String m = input.next();
+		if(Integer.parseInt(m)==1){
+			result=0;
+			duqu();
+			
+		}
+		else{
 		qingkong();
+		}
 		jilu();
 		//tu[1][1]=1;
 		//tu[2][1]=1;
@@ -327,12 +403,18 @@ public class FiveChess {
 		while(result==0){
 			game();
 		}
+		System.out.println("*********************************");
+		System.out.println("\n");
 		if(result==1){
-			System.out.println("游戏结束！  黑旗胜!");
+			
+			System.out.println("        游戏结束！  黑旗胜!");
+			
 		}
 		else{
-			System.out.println("游戏结束！  白旗胜!");
+			System.out.println("        游戏结束！  白旗胜!");
 		}
+		System.out.println("\n");
+		System.out.println("*********************************");
 		//System.out.println(panduan(1,1));
 	}
 
