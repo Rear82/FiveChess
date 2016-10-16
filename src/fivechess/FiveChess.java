@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package fivechess;
 
 import java.io.BufferedReader;
@@ -13,33 +8,22 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.*;
 
-/**
- *
- * @author Rear82
- */
+
 public class FiveChess {
 
-	/*
-	 * To change this license header, choose License Headers in Project Properties.
-	 * To change this template file, choose Tools | Templates
-	 * and open the template in the editor.
+	
+	 /*
+	 * @作者: Rear82
 	 */
-	/**
-	 *
-	 * @author Rear82
-	 */
-	static int[][] tu = new int[10][10];
+	static int[][] chessBoard = new int[10][10];
 	static int[] last = new int[2];
 	static int[][] lastback = new int[1000][2];
 	static int[][][] tuback = new int[1000][10][10];
 	static int who, result, bushu;
 	static int[] whoback = new int[1000];
 
-	/**
-	 * @param args the command line arguments
-	 */
-
-	public static void cundang() throws Exception {
+	
+	public static void saveOnFile() throws Exception {
 		File file = new File("存档.txt");
 		if (!file.exists()) {
 			file.createNewFile();
@@ -55,18 +39,18 @@ public class FiveChess {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				br.newLine();
-				br.write(Integer.toString(tu[i][j]));
+				br.write(Integer.toString(chessBoard[i][j]));
 			}
 		}
 		br.close();
 	}
 
-	public static void duqu() throws Exception {
+	public static void readFromFile() throws Exception {
 		File file = new File("存档.txt");
 		if (!file.exists()) {
 			System.out.println("没有发现存档文件！");
 			result = 0;
-			qingkong();
+			clear();
 		} else {
 			InputStreamReader isr = new InputStreamReader(new FileInputStream(file), "utf-8");
 			BufferedReader br = new BufferedReader(isr);
@@ -82,7 +66,7 @@ public class FiveChess {
 			last[1] = shuju[2];
 			for (i = 0; i < 10; i++) {
 				for (int j = 0; j < 10; j++) {
-					tu[i][j] = shuju[i * 10 + j + 3];
+					chessBoard[i][j] = shuju[i * 10 + j + 3];
 				}
 			}
 		}
@@ -90,7 +74,7 @@ public class FiveChess {
 
 	public static String zhuanhuan(int i, int j) {
 		if (i == last[0] && j == last[1]) {
-			switch (tu[i][j]) {
+			switch (chessBoard[i][j]) {
 				case 0:
 					return " " + Integer.toString(i) + Integer.toString(j) + " ";
 				case 1:
@@ -100,7 +84,7 @@ public class FiveChess {
 			}
 
 		} else {
-			switch (tu[i][j]) {
+			switch (chessBoard[i][j]) {
 				case 0:
 					return " " + Integer.toString(i) + Integer.toString(j) + " ";
 				case 1:
@@ -112,7 +96,7 @@ public class FiveChess {
 		return "    ";
 	}
 
-	public static void qingkong() {
+	public static void clear() {
 		who = 1;
 		result = 0;
 		bushu = 1;
@@ -120,15 +104,15 @@ public class FiveChess {
 		last[1] = -1;
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
-				tu[i][j] = 0;
+				chessBoard[i][j] = 0;
 			}
 		}
 	}
 
-	public static void jilu() {
+	public static void chessSave() {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
-				tuback[bushu][i][j] = tu[i][j];
+				tuback[bushu][i][j] = chessBoard[i][j];
 			}
 		}
 		whoback[bushu] = who;
@@ -136,11 +120,11 @@ public class FiveChess {
 		lastback[bushu][1] = last[1];
 	}
 
-	public static void huifu() {
+	public static void chessBack() {
 		bushu--;
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
-				tu[i][j] = tuback[bushu][i][j];
+				chessBoard[i][j] = tuback[bushu][i][j];
 			}
 		}
 		who = whoback[bushu];
@@ -177,9 +161,9 @@ public class FiveChess {
 
 	}
 
-	public static int luozi(int a, int b) {
-		if (tu[a][b] == 0) {
-			tu[a][b] = who;
+	public static int operateChess(int a, int b) {
+		if (chessBoard[a][b] == 0) {
+			chessBoard[a][b] = who;
 			last[0] = a;
 			last[1] = b;
 			return 1;
@@ -188,7 +172,7 @@ public class FiveChess {
 		return 0;
 	}
 
-	private static int qiujie1(int a) {
+	private static int lookDownBound(int a) {
 		if (a - 4 >= 0) {
 			return a - 4;
 		} else {
@@ -196,7 +180,7 @@ public class FiveChess {
 		}
 	}
 
-	private static int qiujie2(int a) {
+	private static int lookUpBound(int a) {
 		if (a + 4 <= 9) {
 			return a + 4;
 		} else {
@@ -213,64 +197,64 @@ public class FiveChess {
 	}
 
 	public static int panduan(int a, int b) {
-		int sj, xj, zj, yj;
-		xj = qiujie1(a);
-		zj = qiujie1(b);
-		sj = qiujie2(a);
-		yj = qiujie2(b);
-		//System.out.println(a+" "+b+" "+xj+" "+zj+" "+sj+" "+yj);
-		int jieguo = 1;
-		for (int i = xj; i <= sj - 4; i++) {
-			jieguo = 1;
+		int Bound_up, Bound_down, Bound_left, Bound_right;
+		Bound_down = lookDownBound(a);
+		Bound_left = lookDownBound(b);
+		Bound_up = lookUpBound(a);
+		Bound_right = lookUpBound(b);
+		//System.out.println(a+" "+b+" "+Bound_down+" "+Bound_left+" "+Bound_up+" "+Bound_right);
+		int result = 1;
+		for (int i = Bound_down; i <= Bound_up - 4; i++) {
+			result = 1;
 			for (int j = i; j <= i + 4; j++) {
-				jieguo = jieguo * tu[j][b];
+				result = result * chessBoard[j][b];
 			}
-			if (jieguo == 1) {
+			if (result == 1) {
 				return 1;
 			}
-			if (jieguo == 32) {
+			if (result == 32) {
 				return 2;
 			}
 		}
-		for (int i = zj; i <= yj - 4; i++) {
-			jieguo = 1;
+		for (int i = Bound_left; i <= Bound_right - 4; i++) {
+			result = 1;
 			for (int j = i; j <= i + 4; j++) {
-				jieguo = jieguo * tu[a][j];
+				result = result * chessBoard[a][j];
 			}
-			if (jieguo == 1) {
+			if (result == 1) {
 				return 1;
 			}
-			if (jieguo == 32) {
+			if (result == 32) {
 				return 2;
 			}
 		}
 		int juli1, juli2, juli3, juli4;
-		juli1 = min(a - xj, b - zj);
-		juli2 = min(sj - a, yj - b);
-		juli3 = min(a - xj, yj - b);
-		juli4 = min(sj - a, b - zj);
+		juli1 = min(a - Bound_down, b - Bound_left);
+		juli2 = min(Bound_up - a, Bound_right - b);
+		juli3 = min(a - Bound_down, Bound_right - b);
+		juli4 = min(Bound_up - a, b - Bound_left);
 		for (int i = a - juli1; i <= a + juli2 - 4; i++) {
-			jieguo = 1;
+			result = 1;
 			for (int j = i - a; j <= i - a + 4; j++) {
-				jieguo = jieguo * tu[a + j][b + j];
+				result = result * chessBoard[a + j][b + j];
 			}
-			if (jieguo == 1) {
+			if (result == 1) {
 				return 1;
 			}
-			if (jieguo == 32) {
+			if (result == 32) {
 				return 2;
 			}
 		}
 
 		for (int i = a - juli3; i <= a + juli4 - 4; i++) {
-			jieguo = 1;
+			result = 1;
 			for (int j = i - a; j <= i - a + 4; j++) {
-				jieguo = jieguo * tu[a + j][b - j];
+				result = result * chessBoard[a + j][b - j];
 			}
-			if (jieguo == 1) {
+			if (result == 1) {
 				return 1;
 			}
-			if (jieguo == 32) {
+			if (result == 32) {
 				return 2;
 			}
 		}
@@ -295,7 +279,7 @@ public class FiveChess {
 			s = input.next();
 			if ("b".equals(s) || "B".equals(s)) {
 				t = 2;
-				huifu();
+				chessBack();
 			}
 
 			if (t == 0) {
@@ -309,7 +293,7 @@ public class FiveChess {
 			}
 
 			if (t == 0) {
-				if (luozi(m, n) == 1) {
+				if (operateChess(m, n) == 1) {
 					t = 1;
 				}
 			}
@@ -320,33 +304,33 @@ public class FiveChess {
 			if (result == 0) {
 				who = 2 / who;
 				bushu++;
-				jilu();
-				cundang();
+				chessSave();
+				saveOnFile();
 			}
 		}
-		xmlprint(tu);
+		xmlprint(chessBoard);
 
 	}
 
 	public static void main(String[] args) throws Exception {
 		// TODO code application logic here
-		System.out.println("欢迎来到2048小游戏！\n开发者:Rear82\n操作说明:使用w键向上，s键向下，d键向右，a键向左。\n您也可以输入b键来撤销上一步操作。\n输入1来载入上一次游戏，输入2来开始新游戏！");
+		System.out.println("欢迎来到五子棋小游戏！\n开发者:Rear82\n操作说明:输入棋盘上对应的数字来落子。\n您也可以输入b键来撤销上一步操作。\n输入1来载入上一次游戏，输入2来开始新游戏！");
 		Scanner input = new Scanner(System.in);
 		String m = input.next();
 		if (Integer.parseInt(m) == 1) {
 			result = 0;
-			duqu();
+			readFromFile();
 
 		} else {
-			qingkong();
+			clear();
 		}
-		jilu();
-		//tu[1][1]=1;
-		//tu[2][1]=1;
-		//tu[3][1]=1;
-		//tu[4][1]=1;
-		//tu[5][1]=1;
-		xmlprint(tu);
+		chessSave();
+		//chessBoard[1][1]=1;
+		//chessBoard[2][1]=1;
+		//chessBoard[3][1]=1;
+		//chessBoard[4][1]=1;
+		//chessBoard[5][1]=1;
+		xmlprint(chessBoard);
 		while (result == 0) {
 			game();
 		}
