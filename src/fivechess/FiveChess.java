@@ -8,10 +8,8 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.*;
 
-
 public class FiveChess {
 
-	
 	 /*
 	 * @作者: Rear82
 	 */
