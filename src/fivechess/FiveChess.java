@@ -10,7 +10,7 @@ import java.util.*;
 
 public class FiveChess {
 
-	 /*
+	/*
 	 * @作者: Rear82
 	 */
 	static int[][] chessBoard = new int[10][10];
@@ -20,7 +20,6 @@ public class FiveChess {
 	static int who, result, bushu;
 	static int[] whoback = new int[1000];
 
-	
 	public static void saveOnFile() throws Exception {
 		File file = new File("存档.txt");
 		if (!file.exists()) {
@@ -68,6 +67,24 @@ public class FiveChess {
 				}
 			}
 		}
+	}
+
+	public static boolean right_Move(String s) {
+		String a, b = null;
+		int i;
+		for (i = 0; i <= 99; i++) {
+			if (i <= 9) {
+				a = "0" + Integer.toString(i);
+				b = Integer.toString(i);
+			} else {
+				a = Integer.toString(i);
+				b = Integer.toString(i);
+			}
+			if (a.equals(s)||b.equals(s)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static String zhuanhuan(int i, int j) {
@@ -273,8 +290,10 @@ public class FiveChess {
 				System.out.println("现在轮到白棋落子:");
 			}
 			Scanner input = new Scanner(System.in);
-			System.out.println("请输入要落子的位置:");
-			s = input.next();
+			do {
+				System.out.println("请输入要落子的位置:");
+				s = input.next();
+			} while (right_Move(s) == false);
 			if ("b".equals(s) || "B".equals(s)) {
 				t = 2;
 				chessBack();
@@ -312,9 +331,13 @@ public class FiveChess {
 
 	public static void main(String[] args) throws Exception {
 		// TODO code application logic here
-		System.out.println("欢迎来到五子棋小游戏！\n开发者:Rear82\n操作说明:输入棋盘上对应的数字来落子。\n您也可以输入b键来撤销上一步操作。\n输入1来载入上一次游戏，输入2来开始新游戏！");
+		System.out.println("欢迎来到五子棋小游戏！\n开发者:Rear82\n操作说明:输入棋盘上对应的数字来落子。\n您也可以输入b键来撤销上一步操作。");
 		Scanner input = new Scanner(System.in);
-		String m = input.next();
+		String m;
+		do {
+			System.out.println("\n输入1来载入上一次游戏，输入2来开始新游戏！");
+			m = input.next();
+		} while (!"1".equals(m) && !"2".equals(m));
 		if (Integer.parseInt(m) == 1) {
 			result = 0;
 			readFromFile();
