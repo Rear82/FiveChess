@@ -72,6 +72,8 @@ public class FiveChess {
 	public static boolean right_Move(String s) {
 		String a, b = null;
 		int i;
+		if("b".equals(s))
+			return true;
 		for (i = 0; i <= 99; i++) {
 			if (i <= 9) {
 				a = "0" + Integer.toString(i);
