@@ -52,18 +52,18 @@ public class FiveChess {
 			InputStreamReader isr = new InputStreamReader(new FileInputStream(file), "utf-8");
 			BufferedReader br = new BufferedReader(isr);
 			String s = null;
-			int[] shuju = new int[103];
+			int[] document = new int[103];
 			int i = 0;
 			while ((s = br.readLine()) != null) {
-				shuju[i] = Integer.parseInt(s);
+				document[i] = Integer.parseInt(s);
 				i++;
 			}
-			who = shuju[0];
-			last[0] = shuju[1];
-			last[1] = shuju[2];
+			who = document[0];
+			last[0] = document[1];
+			last[1] = document[2];
 			for (i = 0; i < 10; i++) {
 				for (int j = 0; j < 10; j++) {
-					chessBoard[i][j] = shuju[i * 10 + j + 3];
+					chessBoard[i][j] = document[i * 10 + j + 3];
 				}
 			}
 		}
@@ -72,8 +72,9 @@ public class FiveChess {
 	public static boolean right_Move(String s) {
 		String a, b = null;
 		int i;
-		if("b".equals(s))
+		if ("b".equals(s)) {
 			return true;
+		}
 		for (i = 0; i <= 99; i++) {
 			if (i <= 9) {
 				a = "0" + Integer.toString(i);
@@ -82,7 +83,7 @@ public class FiveChess {
 				a = Integer.toString(i);
 				b = Integer.toString(i);
 			}
-			if (a.equals(s)||b.equals(s)) {
+			if (a.equals(s) || b.equals(s)) {
 				return true;
 			}
 		}
