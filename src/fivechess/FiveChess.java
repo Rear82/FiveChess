@@ -17,7 +17,7 @@ public class FiveChess {
 	static int[] last = new int[2];
 	static int[][] lastback = new int[1000][2];
 	static int[][][] tuback = new int[1000][10][10];
-	static int who, result, bushu;
+	static int who, result, step;
 	static int[] whoback = new int[1000];
 
 	public static void saveOnFile() throws Exception {
@@ -116,7 +116,7 @@ public class FiveChess {
 	public static void clear() {
 		who = 1;
 		result = 0;
-		bushu = 1;
+		step = 1;
 		last[0] = 1;
 		last[1] = -1;
 		for (int i = 0; i < 10; i++) {
@@ -129,24 +129,24 @@ public class FiveChess {
 	public static void chessSave() {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
-				tuback[bushu][i][j] = chessBoard[i][j];
+				tuback[step][i][j] = chessBoard[i][j];
 			}
 		}
-		whoback[bushu] = who;
-		lastback[bushu][0] = last[0];
-		lastback[bushu][1] = last[1];
+		whoback[step] = who;
+		lastback[step][0] = last[0];
+		lastback[step][1] = last[1];
 	}
 
 	public static void chessBack() {
-		bushu--;
+		step--;
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
-				chessBoard[i][j] = tuback[bushu][i][j];
+				chessBoard[i][j] = tuback[step][i][j];
 			}
 		}
-		who = whoback[bushu];
-		last[0] = lastback[bushu][0];
-		last[1] = lastback[bushu][1];
+		who = whoback[step];
+		last[0] = lastback[step][0];
+		last[1] = lastback[step][1];
 	}
 
 	public static void xmlprint(int arr[][]) {
@@ -213,7 +213,7 @@ public class FiveChess {
 		}
 	}
 
-	public static int panduan(int a, int b) {
+	public static int judge(int a, int b) {
 		int Bound_up, Bound_down, Bound_left, Bound_right;
 		Bound_down = lookDownBound(a);
 		Bound_left = lookDownBound(b);
@@ -319,10 +319,10 @@ public class FiveChess {
 		} while (t == 0);
 
 		if (t == 1) {
-			result = panduan(m, n);
+			result = judge(m, n);
 			if (result == 0) {
 				who = 2 / who;
-				bushu++;
+				step++;
 				chessSave();
 				saveOnFile();
 			}
@@ -368,7 +368,7 @@ public class FiveChess {
 		}
 		System.out.println("\n");
 		System.out.println("*********************************");
-		//System.out.println(panduan(1,1));
+		//System.out.println(judge(1,1));
 	}
 
 }
